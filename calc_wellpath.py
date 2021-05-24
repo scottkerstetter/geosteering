@@ -9,6 +9,7 @@ Created: 2021-05-23
 import math
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
 
 # well data inputs
 file_name = "surveys.csv"
@@ -132,16 +133,27 @@ def min_curv(surveys, shl_x, shl_y, tgt_azi):
 			dvs *= -1
 		runsum_vs += dvs
 		vs_list.append(runsum_vs)
-		print(md_list[svy], runsum_tvd)
 	return easting_list, northing_list, tvd_list, vs_list
 
 def plot_wellbore_xyz(coordinates):
-	# unpack xyz coordinates
+	# unpack xyz coordinates and convert to arrays
 	x, y, z = coordinates
+	x = np.asarray(x)
+	y = np.asarray(y)
+	z = np.asarray(z)
 	
 	fig = plt.figure()
+	fig.set_size_inches(5,5)
+	
 	ax = fig.add_subplot(111, projection='3d')
-	fig.show()
+	
+	ax.plot(x,y,z, lw=3, color='black', label='Wellbore')
+	
+	ax.set_xlabel('Easting')
+	ax.set_ylabel('Northing')
+	ax.set_zlabel('TVD')
+	ax.invert_zaxis()
+	plt.show()
 	return
 
 def plot_wellbore_tvd_vs(coordinates):
@@ -171,6 +183,6 @@ xyz = easting_list, northing_list, tvd_list
 
 tvd_vs = [tvd_list, vs_list]
 
-plot_wellbore_tvd_vs(tvd_vs)
+#plot_wellbore_tvd_vs(tvd_vs)
 
 plot_wellbore_xyz(xyz)
